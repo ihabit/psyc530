@@ -1,0 +1,112 @@
+---
+title: "PSYC530 Cog Eng - Exercise 2"
+subtitle: "d' and c Values Across Multiple Mammographic Test Series for More or Less Experienced Diagnosticians"
+bibliography: bib.bib
+format: 
+  pdf:
+    cite-method: biblatex
+    documentclass: report
+    code-fold: true
+    code-summary: "Code"
+    mainfont: Helvetica Neue
+editor: visual
+---
+
+Ian Habit
+
+9/16/2024
+
+PSYC 530 - Cognitive Engineering
+
+William "Deak" Helton
+
+George Mason University
+
+### Methodology
+
+I used the provided Excel sheet to calculate the *d'* and *c* values for each group. The values used to calculate *d'* and *c* were the "Sensitivity" and "Specificity" values provided in Table 3 of the **"Variations in breast cancer detection rates during mammogram-reading sessions: does experience have an impact?"** (Alshabibi et al., 2021) journal article.
+
+I then coded these values into a new CSV file and performed the analysis and write-up in an R-based Quarto file, using the ggplot package to graph the *d'* and *c* values.
+
+```{r include=FALSE}
+library(ggrepel)
+library(tidyverse)
+
+
+getwd()
+setwd("/Users/ianhabit/Documents/GitHub/psyc530/exercise_2_report")
+df <- read.csv("ex2.csv")
+```
+
+### Graphical Analysis
+
+```{r echo=FALSE}
+# d prime line plot
+
+df_long <- df %>%
+  pivot_longer(cols = c("s1_dprime", "s2_dprime", "s3_dprime"),
+               names_to = "series", values_to = "dprime")
+
+df_long$series <- factor(df_long$series, 
+                        levels = c("s1_dprime", "s2_dprime", "s3_dprime"),
+                        labels = c("Series 1", "Series 2", "Series 3"))
+
+ggplot(df_long, aes(x = series, y = dprime, group = group, color = group)) +
+  geom_line() +         # Add lines connecting points
+  geom_point(size = 3) + # Add points for each data point
+  geom_text_repel(aes(label = round(dprime, 2)),
+            vjust = 2.0, hjust = 0.5,      
+            size = 3.5) +   
+  labs(title = "d' Values Across Series for More and Less Groups",
+       x = "Mammographic Series",
+       y = "d' Value",
+       color = "Group") +
+  theme_minimal() +      # Clean plot theme
+  scale_color_manual(values = c("more" = "blue", "less" = "red")) +
+  scale_y_continuous(limits = c(0, 3),
+                     breaks = seq(0, 3, 1)
+  )
+
+
+# criterion line plot
+
+df_long <- df %>%
+  pivot_longer(cols = c("s1_crit", "s2_crit", "s3_crit"),
+               names_to = "series", values_to = "crit")
+
+df_long$series <- factor(df_long$series, 
+                         levels = c("s1_crit", "s2_crit", "s3_crit"),
+                         labels = c("Series 1", "Series 2", "Series 3"))
+
+ggplot(df_long, aes(x = series, y = crit, group = group, color = group)) +
+  geom_line() +         # Add lines connecting points
+  geom_point(size = 3) +
+  geom_text_repel(aes(label = round(crit, 2)),
+            vjust = 2.0, hjust = 0.5, size = 3.5) + 
+  labs(title = "c Values Across Series for More and Less Groups",
+       x = "Mammographic Series",
+       y = "c Value",
+       color = "Group") +
+  theme_minimal() +      # Clean plot theme
+  scale_color_manual(values = c("more" = "blue", "less" = "red")) +
+  scale_y_continuous(limits = c(-0.5, 0.75),
+                     breaks = seq(-0.5, 0.75, 0.25)
+  )
+
+```
+
+### Discussion
+
+Examining the *d' values* (diagnosticity) and *criterion values* (bias) of the **More Experienced** (≥2000 screenings) and **Less Experienced** (≤ 2000 screenings) radiologists screening for breast cancer reveals that the **More Experienced** group experienced an increase in *d'* after the first series of mammography tests, followed by a marginal rate increase thereafter for the second and third series. The *criterion values* of the **More Experienced** group also decreased across the series.
+
+This shows that **More Experienced** radiologists were better able to discriminate between test results that indicated cancer and those that did not (sensitivity) as they were exposed to subsequent test series. They also adjusted their criterion to be less conservative as the series went on, which increases hit rate but potentially raises false alarm rates. A holistic (without proper data analysis) interpretation of these values may be that **More Experienced** providers are more accurate in their diagnostic verdicts and have a higher likelihood of flagging results as cancer as they interact with more results over time, with little decrease in performance.
+
+The **Less Experienced** group saw inverse results indicative of the vigilance decrement: their d' levels decreased and criterion levels increased, meaning they became less accurate in identifying results and became more conservative as a reaction to decrease their false alarm and miss rates in detecting cancer.
+
+This neophyte's graphical interpretation is consistent with the findings of the Alshabibi et al. (2021) article — junior radiologists should consider more frequent rest compared to their more senior counterparts, and comports with the finding reported by Helton & Russell (2017) that "rest is still best" as a countermeasure for the vigilance decrement on long time-on-task events.
+
+### References
+
+Alshabibi, A. S., Suleiman, M. E., Albeshan, S. M., Heard, R., & Brennan, P. C. (2022). Variations in breast cancer detection rates during mammogram-reading sessions: Does experience have an impact? *The British Journal of Radiology*, *95*(1129), 20210895. <https://doi.org/10.1259/bjr.20210895>:
+
+Helton, W. S., & Russell, P. N. (2017). Rest Is Still Best: The Role of the Qualitative and Quantitative Load of Interruptions on Vigilance. *Human Factors: The Journal of the Human Factors and Ergonomics Society*, *59*(1), 91–100. <https://doi.org/10.1177/0018720816683509>:
