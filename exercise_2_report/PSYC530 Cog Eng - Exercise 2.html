@@ -106,8 +106,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <hr>
 <section id="methodology" class="level3">
 <h3 class="anchored" data-anchor-id="methodology">Methodology</h3>
-<p>I used the provided Excel sheet to calculate the <em>d’</em> and <em>c</em> values for each group. The values used to calculate <em>d’</em> and <em>c</em> were the “Sensitivity” and “Specificity” values provided in Table 3 of the <strong>“Variations in breast cancer detection rates during mammogram-reading sessions: does experience have an impact?”</strong> paper.</p>
-<p>I then coded these values into a new CSV file and performed the analysis and write-up in a R-based Quarto file, using the ggplot package to graph the <em>d’</em> and <em>c</em> values.</p>
+<p>I used the provided Excel sheet to calculate the <em>d’</em> and <em>c</em> values for each group. The values used to calculate <em>d’</em> and <em>c</em> were the “Sensitivity” and “Specificity” values provided in Table 3 of the <strong>“Variations in breast cancer detection rates during mammogram-reading sessions: does experience have an impact?”</strong> (Alshabibi et al., 2021)journal article.</p>
+<p>I then coded these values into a new CSV file and performed the analysis and write-up in an R-based Quarto file, using the ggplot package to graph the <em>d’</em> and <em>c</em> values.</p>
 <hr>
 </section>
 <section id="graphical-analysis" class="level3">
@@ -187,6 +187,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="discussion" class="level3">
 <h3 class="anchored" data-anchor-id="discussion">Discussion</h3>
+<p>Examining the <em>d’ values</em> (diagnosticity) and <em>criterion values</em> (bias) of the <strong>More Experienced</strong> (≥2000 screenings) and <strong>Less Experienced</strong> (≤ 2000 screenings) radiologists screening for breast cancer reveals that the <strong>More Experienced</strong> group experienced an increase in <em>d’</em> after the first series of mammography tests, followed by a marginal rate increase thereafter for the second and third series. The <em>criterion values</em> of the <strong>More Experienced</strong> group also decreased across the series.</p>
+<p>This shows that <strong>More Experienced</strong> radiologists were better able to discriminate between test results that indicated cancer and those that did not (sensitivity) as they were exposed to subsequent test series. They also adjusted their criterion to be less conservative as the series went on, which increases hit rate but potentially raises false alarm rates. A holistic (without proper data analysis) interpretation of these values may be that <strong>More Experienced</strong> providers are more accurate in their diagnostic verdicts and have a higher likelihood of flagging results as cancer as they interact with more results over time, with little decrease in performance.</p>
+<p>The <strong>Less Experienced</strong> group saw inverse results indicative of the vigilance decrement: their d’ levels decreased and criterion levels increased, meaning they became less accurate in identifying results and became more conservative as a reaction to decrease their false alarm and miss rates in detecting cancer.</p>
+<p>This neophyte’s graphical interpretation is consistent with the findings of the Alshabibi et al.&nbsp;(2021) article — junior radiologists should consider more frequent rest compared to their more senior counterparts, and comports with the finding reported by Helton &amp; Russell (2017) that “rest is still best” as a countermeasure for the vigilance decrement on long time-on-task events.</p>
+<hr>
+</section>
+<section id="references" class="level3">
+<h3 class="anchored" data-anchor-id="references">References</h3>
+<p style="padding-left: 2em; text-indent: -2em;">
+</p><p>Alshabibi, A. S., Suleiman, M. E., Albeshan, S. M., Heard, R., &amp; Brennan, P. C. (2022). Variations in breast cancer detection rates during mammogram-reading sessions: Does experience have an impact? <em>The British Journal of Radiology</em>, <em>95</em>(1129), 20210895. <a href="https://doi.org/10.1259/bjr.20210895" class="uri">https://doi.org/10.1259/bjr.20210895</a>:</p>
+<p></p>
+<p style="padding-left: 2em; text-indent: -2em;">
+</p><p>Helton, W. S., &amp; Russell, P. N. (2017). Rest Is Still Best: The Role of the Qualitative and Quantitative Load of Interruptions on Vigilance. <em>Human Factors: The Journal of the Human Factors and Ergonomics Society</em>, <em>59</em>(1), 91–100. <a href="https://doi.org/10.1177/0018720816683509" class="uri">https://doi.org/10.1177/0018720816683509</a>:</p>
+<p></p>
 </section>
 </section>
 
