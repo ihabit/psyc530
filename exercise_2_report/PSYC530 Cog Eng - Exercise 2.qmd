@@ -1,0 +1,101 @@
+---
+title: "PSYC 530 - CogEng Exercise 2"
+format: 
+  html:
+    code-fold: true
+    code-summary: "Code"
+editor: visual
+---
+
+## d' and c Values Across Multiple Mammographic Test Series for "More" or "Less" Experienced Diagnosticians
+
+Ian Habit
+
+9/16/2024
+
+PSYC 530 - Cognitive Engineering
+
+William "Deak" Helton
+
+George Mason University
+
+------------------------------------------------------------------------
+
+### Methodology
+
+I used the provided Excel sheet to calculate the *d'* and *c* values for each group. The values used to calculate *d'* and *c* were the "Sensitivity" and "Specificity" values provided in Table 3 of the **"Variations in breast cancer detection rates during mammogram-reading sessions: does experience have an impact?"** paper.
+
+I then coded these values into a new CSV file and performed the analysis and write-up in a R-based Quarto file, using the ggplot package to graph the *d'* and *c* values.
+
+------------------------------------------------------------------------
+
+```{r include=FALSE}
+library(ggrepel)
+library(tidyverse)
+
+
+getwd()
+setwd("/Users/ianhabit/Documents/GitHub/psyc530/exercise_2_report")
+df <- read.csv("ex2.csv")
+```
+
+### Graphical Analysis
+
+```{r}
+# d prime line plot
+
+df_long <- df %>%
+  pivot_longer(cols = c("s1_dprime", "s2_dprime", "s3_dprime"),
+               names_to = "series", values_to = "dprime")
+
+df_long$series <- factor(df_long$series, 
+                        levels = c("s1_dprime", "s2_dprime", "s3_dprime"),
+                        labels = c("Series 1", "Series 2", "Series 3"))
+
+ggplot(df_long, aes(x = series, y = dprime, group = group, color = group)) +
+  geom_line() +         # Add lines connecting points
+  geom_point(size = 3) + # Add points for each data point
+  geom_text_repel(aes(label = round(dprime, 2)),
+            vjust = 2.0, hjust = 0.5,      
+            size = 3.5) +   
+  labs(title = "d' Values Across Series for More and Less Groups",
+       x = "Mammographic Series",
+       y = "d' Value",
+       color = "Group") +
+  theme_minimal() +      # Clean plot theme
+  scale_color_manual(values = c("more" = "blue", "less" = "red")) +
+  scale_y_continuous(limits = c(0, 3),
+                     breaks = seq(0, 3, 1)
+  )
+
+
+# criterion line plot
+
+df_long <- df %>%
+  pivot_longer(cols = c("s1_crit", "s2_crit", "s3_crit"),
+               names_to = "series", values_to = "crit")
+
+df_long$series <- factor(df_long$series, 
+                         levels = c("s1_crit", "s2_crit", "s3_crit"),
+                         labels = c("Series 1", "Series 2", "Series 3"))
+
+ggplot(df_long, aes(x = series, y = crit, group = group, color = group)) +
+  geom_line() +         # Add lines connecting points
+  geom_point(size = 3) +
+  geom_text_repel(aes(label = round(crit, 2)),
+            vjust = 2.0, hjust = 0.5, size = 3.5) + 
+  labs(title = "c Values Across Series for More and Less Groups",
+       x = "Mammographic Series",
+       y = "c Value",
+       color = "Group") +
+  theme_minimal() +      # Clean plot theme
+  scale_color_manual(values = c("more" = "blue", "less" = "red")) +
+  scale_y_continuous(limits = c(-0.5, 0.75),
+                     breaks = seq(-0.5, 0.75, 0.25)
+  )
+
+```
+
+------------------------------------------------------------------------
+
+### Discussion
